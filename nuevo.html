@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma de Videos - Premium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #f4f4f4;
+            color: #000;
+        }
+
+        /* Barra lateral */
+        .sidebar {
+            width: 220px;
+            background-color: #2c3e50;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            color: white;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar ul li a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #34495e;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* Barra de navegación superior */
+        .navbar {
+            background-color: #e74c3c;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        .navbar .search-bar input {
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        /* Sección de videos */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 15px;
+        }
+
+        .video-card {
+            background-color: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-card img {
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        .premium-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: gold;
+            color: black;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .video-card p {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>Categorías</h2>
+        <ul>
+            <li><a href="#">Cine</a></li>
+            <li><a href="#">Música</a></li>
+            <li><a href="#">Deportes</a></li>
+            <li><a href="#">Documentales</a></li>
+            <li><a href="#">Tecnología</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-content">
+        <nav class="navbar">
+            <div class="logo">
+                <h1>Plataforma Premium</h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar...">
+            </div>
+        </nav>
+
+        <div class="video-grid">
+            <script>
+                const videos = [
+                    {title: "Película Exclusiva 1", url: "https://www.example.com/video1.mp4"},
+                    {title: "Concierto en Vivo", url: "https://www.example.com/video2.mp4"},
+                    {title: "Partido Final", url: "https://www.example.com/video3.mp4"},
+                    {title: "Documental Interesante", url: "https://www.example.com/video4.mp4"},
+                    {title: "Tutorial de Programación", url: "https://www.example.com/video5.mp4"},
+                    {title: "Avances de Ciencia", url: "https://www.example.com/video6.mp4"},
+                    {title: "Historia del Arte", url: "https://www.example.com/video7.mp4"},
+                    {title: "Música Clásica", url: "https://www.example.com/video8.mp4"}
+                ];
+                
+                videos.forEach(video => {
+                    document.write(`
+                        <div class='video-card' onclick="openVideo('${video.url}')">
+                            <span class='premium-badge'>Premium</span>
+                            <img src='https://via.placeholder.com/200' alt='Video'>
+                            <p>${video.title}</p>
+                        </div>
+                    `);
+                });
+            </script>
+        </div>
+    </div>
+
+    <script>
+        function openVideo(url) {
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
+

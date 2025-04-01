@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Identificación de Emociones</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #FDEFF4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4, #87CEEB);
+            padding: 2rem;
+            color: white;
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-container {
+            margin-top: 20px;
+        }
+
+        .emotion-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .choice {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .choice:hover {
+            background-color: #FF6347;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            color: green;
+        }
+
+        button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF6347;
+        }
+
+        .audio-controls {
+            margin-top: 20px;
+        }
+
+        .return-home {
+            margin-top: 30px;
+            background-color: #4CAF50;
+        }
+
+        .return-home:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>Juego de Identificación de Emociones</header>
+    <p>Ayuda a identificar la emoción correcta a partir de la imagen.</p>
+
+    <div class="game-container">
+        <img id="emotion-image" src="happy.jpg" alt="Emoción" class="emotion-image">
+        
+        <div class="choices">
+            <button class="choice" onclick="checkAnswer('Feliz')">Feliz</button>
+            <button class="choice" onclick="checkAnswer('Triste')">Triste</button>
+            <button class="choice" onclick="checkAnswer('Enojado')">Enojado</button>
+            <button class="choice" onclick="checkAnswer('Sorpresa')">Sorpresa</button>
+        </div>
+
+        <div id="result" class="result"></div>
+
+        <button onclick="siguientePregunta()">Siguiente Pregunta</button>
+        <button onclick="reiniciarJuego()">Reiniciar Juego</button>
+        
+        <div class="audio-controls">
+            <button onclick="leerInstrucciones()">🔊 Escuchar Instrucciones</button>
+            <button onclick="detenerInstrucciones()">⏹️ Detener</button>
+        </div>
+
+        <button onclick="window.location.href='Prototipo.html'">🏠 Volver al Menú Principal</button>
+    </div>
+
+    <script>
+        const emociones = [
+            { imagen: 'happy.jpg', respuesta: 'Feliz', explicacion: 'La emoción que muestra esta cara es felicidad. La sonrisa amplia es un indicador claro de alegría.' },
+            { imagen: 'sad.jpg', respuesta: 'Triste', explicacion: 'La tristeza se refleja en la cara con los ojos caídos y la boca hacia abajo, lo que indica desánimo.' },
+            { imagen: 'angry.jpg', respuesta: 'Enojado', explicacion: 'El enojo se muestra en el fruncimiento del ceño y una expresión facial tensa.' },
+            { imagen: 'surprised.jpg', respuesta: 'Sorpresa', explicacion: 'La sorpresa se ve en una boca abierta y ojos muy grandes, mostrando asombro o desconcierto.' }
+        ];
+        
+        let preguntaActual = 0;
+        let speech;
+
+        function mostrarPregunta() {
+            const emocion = emociones[preguntaActual];
+            document.getElementById("emotion-image").src = emocion.imagen;
+            document.getElementById("result").innerHTML = '';
+            leerInstrucciones(); // Leer las instrucciones cada vez que se muestra una nueva pregunta
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const correcta = emociones[preguntaActual].respuesta;
+            const explicacion = emociones[preguntaActual].explicacion;
+
+            if (selectedAnswer === correcta) {
+                document.getElementById("result").innerHTML = `¡Correcto! 🎉 ${explicacion}`;
+                speakAnswer(true, explicacion); // Explicar por qué es correcto
+            } else {
+                document.getElementById("result").innerHTML = `¡Incorrecto! 😢 ${explicacion}`;
+                speakAnswer(false, explicacion); // Explicar por qué es incorrecto
+            }
+        }
+
+        function speakAnswer(isCorrect, explanation) {
+            let response = isCorrect ? 'Respuesta correcta. ' : 'Respuesta incorrecta. ';
+            response += explanation;
+            let utterance = new SpeechSynthesisUtterance(response);
+            utterance.lang = 'es-ES';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function siguientePregunta() {
+            preguntaActual = (preguntaActual + 1) % emociones.length;
+            mostrarPregunta();
+        }
+
+        function reiniciarJuego() {
+            preguntaActual = 0;
+            mostrarPregunta();
+            document.getElementById("result").innerHTML = '';
+        }
+
+        function leerInstrucciones() {
+            detenerInstrucciones();
+            let instrucciones = "Selecciona la emoción correcta para la imagen que ves.";
+            let utterance = new SpeechSynthesisUtterance(instrucciones);
+            utterance.lang = 'es-ES';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function detenerInstrucciones() {
+            window.speechSynthesis.cancel();
+        }
+
+        function volverInicio() {
+            window.location.href = 'Prototipo.html'; // Aquí pon el nombre de tu página de inicio o el enlace correspondiente
+        }
+
+        mostrarPregunta();
+    </script>
+</body>
+</html>
+
+
+

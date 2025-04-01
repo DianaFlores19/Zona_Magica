@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuento sobre la Amistad</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #FDEFF4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4, #87CEEB);
+            padding: 2rem;
+            color: white;
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .image-container img.active {
+            opacity: 1;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF6347;
+        }
+    </style>
+</head>
+<body>
+    <header>Un Cuento sobre la Amistad</header>
+    
+    <div class="story-container">
+        <h2>"El Bosque de la Amistad"</h2>
+        <div class="image-container">
+            <img src="conejo.gif" class="active" alt="Amigos jugando">
+            <img src="zorro.gif" alt="Amigos ayudándose">
+            <img src="imagen3.jpg" alt="Amigos felices juntos">
+        </div>
+        <p id="cuento">En un bosque mágico vivían un conejito llamado Coco y un zorrito llamado Leo. Desde el primer día que se conocieron, se hicieron grandes amigos. Juntos exploraban el bosque, compartían sus alimentos y se ayudaban cuando uno estaba triste. Un día, una gran tormenta golpeó el bosque y derribó muchos árboles. Coco y Leo trabajaron juntos para ayudar a reconstruir sus hogares y cuidar a sus amigos. Aprendieron que la verdadera amistad significa estar ahí en los momentos buenos y malos. Y así, su amistad se hizo más fuerte que nunca.</p>
+    </div>
+    
+    <button onclick="narrarCuento()">🔊 Escuchar Cuento</button>
+    <button onclick="detenerNarracion()">⏹️ Detener</button>
+    <button onclick="window.location.href='Prototipo.html'">🏠 Volver al Menú Principal</button>
+    
+    <script>
+        let speech;
+        let imagenes = document.querySelectorAll(".image-container img");
+        let indice = 0;
+
+        // Cambia la imagen cada 3 segundos
+        function cambiarImagen() {
+            imagenes.forEach(img => img.classList.remove("active"));
+            imagenes[indice].classList.add("active");
+            indice = (indice + 1) % imagenes.length;
+        }
+
+        // Inicia la animación de cambio de imágenes
+        function iniciarAnimacion() {
+            setInterval(cambiarImagen, 3000); // Cambia cada 3 segundos
+        }
+
+        // Función para narrar el cuento
+        function narrarCuento() {
+            detenerNarracion();
+            let texto = document.getElementById("cuento").innerText;
+            speech = new SpeechSynthesisUtterance(texto);
+            speech.lang = 'es-ES';
+            speech.pitch = 1.5;
+            speech.rate = 0.9;
+            speechSynthesis.speak(speech);
+        }
+
+        // Detiene la narración
+        function detenerNarracion() {
+            speechSynthesis.cancel();
+        }
+
+        // Inicia la animación de las imágenes al cargar la página
+        iniciarAnimacion();
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Colores</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #FDEFF4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4, #87CEEB);
+            padding: 2rem;
+            color: white;
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .color-target {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .object-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+        }
+
+        .object {
+            font-size: 3rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .object:hover {
+            transform: scale(1.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF6347;
+        }
+    </style>
+</head>
+<body>
+    <header>Juego de Colores</header>
+    <p id="instrucciones">Escucha el color y selecciona los objetos que coincidan con él.</p>
+    
+    <button onclick="leerInstrucciones()">🔊 Escuchar Instrucciones</button>
+    <button onclick="detenerInstrucciones()">⏹️ Detener</button>
+    
+    <p class="color-target" id="color-target"></p>
+    
+    <div class="object-container" id="objects"></div>
+    
+    <button onclick="nuevoJuego()">🔄 Nuevo Color</button>
+    <button onclick="window.location.href='Prototipo.html'">🏠 Volver al Menú Principal</button>
+    
+    <script>
+        const colores = [
+            { nombre: 'Rojo', hex: '#FF0000', objetos: ['🍎', '🚗', '🌹'] },
+            { nombre: 'Azul', hex: '#0000FF', objetos: ['💧', '🐟', '👕'] },
+            { nombre: 'Verde', hex: '#008000', objetos: ['🌳', '🐢', '🍏'] },
+            { nombre: 'Amarillo', hex: '#FFFF00', objetos: ['🌞', '🍌', '🐥'] },
+            { nombre: 'Naranja', hex: '#FFA500', objetos: ['🍊', '🦊', '🏀'] },
+            { nombre: 'Morado', hex: '#800080', objetos: ['🍇', '🔮', '🦄'] },
+            { nombre: 'Rosa', hex: '#FF69B4', objetos: ['🌸', '🎀', '🩰'] },
+            { nombre: 'Café', hex: '#8B4513', objetos: ['🐻', '🍫', '🌰'] }
+        ];
+        
+        let speech;
+        let colorSeleccionado;
+
+        function nuevoJuego() {
+            const colorAleatorio = colores[Math.floor(Math.random() * colores.length)];
+            colorSeleccionado = colorAleatorio;
+            document.getElementById("color-target").textContent = `Selecciona los objetos de color ${colorAleatorio.nombre}`;
+            decirTexto(colorAleatorio.nombre);
+            mostrarObjetos();
+        }
+        
+        function mostrarObjetos() {
+            const contenedor = document.getElementById("objects");
+            contenedor.innerHTML = "";
+            
+            const objetosDesordenados = colores.flatMap(c => c.objetos).sort(() => Math.random() - 0.5);
+            
+            objetosDesordenados.forEach(obj => {
+                const objElement = document.createElement("span");
+                objElement.classList.add("object");
+                objElement.textContent = obj;
+                objElement.onclick = () => verificarSeleccion(obj);
+                contenedor.appendChild(objElement);
+            });
+        }
+        
+        function verificarSeleccion(objeto) {
+            if (colorSeleccionado.objetos.includes(objeto)) {
+                decirTexto("¡Correcto! Este objeto es de color " + colorSeleccionado.nombre);
+            } else {
+                decirTexto("Inténtalo de nuevo. Este objeto no es de color " + colorSeleccionado.nombre);
+            }
+        }
+        
+        function decirTexto(texto) {
+            detenerInstrucciones();
+            speech = new SpeechSynthesisUtterance(texto);
+            speech.lang = 'es-ES';
+            window.speechSynthesis.speak(speech);
+        }
+        
+        function leerInstrucciones() {
+            detenerInstrucciones();
+            let texto = document.getElementById("instrucciones").innerText;
+            decirTexto(texto);
+        }
+        
+        function detenerInstrucciones() {
+            window.speechSynthesis.cancel();
+        }
+        
+        nuevoJuego();
+    </script>
+</body>
+</html>
+
+

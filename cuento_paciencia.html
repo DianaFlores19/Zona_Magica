@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuento sobre la Paciencia</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #FDEFF4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4, #87CEEB);
+            padding: 2rem;
+            color: white;
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .image-container img.active {
+            opacity: 1;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF6347;
+        }
+    </style>
+</head>
+<body>
+    <header>Un Cuento sobre la Paciencia</header>
+    
+    <div class="story-container">
+        <h2>"El Árbol Paciente"</h2>
+        <div class="image-container">
+            <img src="arbol1.jpg" class="active" alt="El árbol en primavera">
+            <img src="arbol2.jpg" alt="El árbol durante el verano">
+            <img src="arbol3.jpg" alt="El árbol en otoño">
+            <img src="arbol4.jpg" alt="El árbol en invierno">
+        </div>
+        <p id="cuento">Había una vez un árbol en un hermoso valle. Desde que fue plantado, el árbol creció lentamente. Todos los animales del bosque lo observaban con paciencia, ya que sabían que, aunque no se veía tan grande al principio, con el tiempo crecería fuerte y alto. Pasaron las estaciones: la primavera, el verano, el otoño y el invierno, y el árbol creció más y más, pero siempre con paciencia. Los animales le decían: "Lo bueno llega a aquellos que esperan." El árbol nunca se apuraba, pues sabía que cada cosa en su debido momento ocurriría. Y así, con el paso del tiempo, se convirtió en el árbol más grande del valle, demostrando que la paciencia trae sus frutos.</p>
+    </div>
+    
+    <button onclick="narrarCuento()">🔊 Escuchar Cuento</button>
+    <button onclick="detenerNarracion()">⏹️ Detener</button>
+    <button onclick="window.location.href='Prototipo.html'">🏠 Volver al Menú Principal</button>
+    
+    <script>
+        let speech;
+        let imagenes = document.querySelectorAll(".image-container img");
+        let indice = 0;
+
+        // Cambia la imagen cada 3 segundos
+        function cambiarImagen() {
+            imagenes.forEach(img => img.classList.remove("active"));
+            imagenes[indice].classList.add("active");
+            indice = (indice + 1) % imagenes.length;
+        }
+
+        // Inicia la animación de cambio de imágenes
+        function iniciarAnimacion() {
+            setInterval(cambiarImagen, 3000); // Cambia cada 3 segundos
+        }
+
+        // Función para narrar el cuento
+        function narrarCuento() {
+            detenerNarracion();
+            let texto = document.getElementById("cuento").innerText;
+            speech = new SpeechSynthesisUtterance(texto);
+            speech.lang = 'es-ES';
+            speech.pitch = 1.5;
+            speech.rate = 0.9;
+            speechSynthesis.speak(speech);
+        }
+
+        // Detiene la narración
+        function detenerNarracion() {
+            speechSynthesis.cancel();
+        }
+
+        // Inicia la animación de las imágenes al cargar la página
+        iniciarAnimacion();
+    </script>
+</body>
+</html>

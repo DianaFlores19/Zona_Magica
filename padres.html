@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sección para Padres - Autismo Nivel 2</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #FDEFF4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4, #87CEEB);
+            text-align: center;
+            padding: 1rem 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #007acc;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            text-align: left;
+            background: #FFF0F5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            padding: 0.8rem 2rem;
+            background-color: #FF6347;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #FF4500;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sección para Padres</h1>
+    </header>
+    <div class="container">
+        <p>Información y recursos esenciales para comprender y apoyar a niños con autismo nivel 2.</p>
+        
+        <div class="section">
+            <h2>¿Qué es el Autismo Nivel 2?</h2>
+            <p>El autismo nivel 2 es una condición dentro del espectro autista caracterizada por dificultades en la comunicación verbal y no verbal, así como en la adaptación a cambios en la rutina. Los niños con este diagnóstico requieren apoyo moderado para desenvolverse en su entorno.</p>
+        </div>
+        
+        <div class="section">
+            <h2>Señales y Características</h2>
+            <p>Algunas señales comunes del autismo nivel 2 incluyen:</p>
+            <ul>
+                <li>Dificultad para comprender y expresar emociones.</li>
+                <li>Resistencia a los cambios en la rutina.</li>
+                <li>Movimientos repetitivos como aleteo de manos o balanceo.</li>
+                <li>Hipersensibilidad a sonidos, luces o texturas.</li>
+                <li>Intereses intensos en temas específicos.</li>
+                <li>Desafíos en la interacción social y la comunicación.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Estrategias para Padres</h2>
+            <p>Algunas estrategias clave para apoyar a niños con autismo nivel 2 incluyen:</p>
+            <ul>
+                <li>Establecer una rutina diaria predecible.</li>
+                <li>Utilizar pictogramas y apoyos visuales para facilitar la comunicación.</li>
+                <li>Crear un ambiente tranquilo y con pocos estímulos distractores.</li>
+                <li>Fomentar la autonomía mediante instrucciones claras y repetitivas.</li>
+                <li>Proporcionar refuerzos positivos para incentivar el aprendizaje.</li>
+                <li>Incluir actividades sensoriales y de relajación en la rutina diaria.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Actividades Recomendadas</h2>
+            <p>Algunas actividades que pueden ayudar a mejorar la comunicación y el bienestar de los niños con autismo nivel 2 incluyen:</p>
+            <ul>
+                <li>Juegos de asociación de imágenes y sonidos.</li>
+                <li>Ejercicios de respiración y relajación.</li>
+                <li>Pintura y dibujo para expresar emociones.</li>
+                <li>Actividades de motricidad fina como ensartar cuentas.</li>
+                <li>Uso de aplicaciones educativas interactivas.</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Recursos y Enlaces</h2>
+            <p>Consulta más información en estos sitios especializados:</p>
+            <a href="https://www.autismspeaks.org/" target="_blank">Autism Speaks</a><br>
+            <a href="https://www.autism.org/" target="_blank">Autism Research Institute</a><br>
+            <a href="https://www.autismparentingmagazine.com/" target="_blank">Autism Parenting Magazine</a>
+        </div>
+        
+        <div class="button-container">
+            <button onclick="leerTexto()">🔊 Escuchar Información</button>
+            <button onclick="detenerTexto()">⏹️ Detener</button>
+            <button onclick="window.location.href='Prototipo.html'">🏠 Volver al Menú Principal</button>
+        </div>
+    </div>
+    
+    <script>
+        let speech;
+        function leerTexto() {
+            detenerTexto();
+            let texto = document.body.innerText;
+            speech = new SpeechSynthesisUtterance(texto);
+            speech.lang = 'es-ES';
+            window.speechSynthesis.speak(speech);
+        }
+        
+        function detenerTexto() {
+            window.speechSynthesis.cancel();
+        }
+    </script>
+</body>
+</html>

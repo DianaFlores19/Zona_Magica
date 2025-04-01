@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juegos de Memoria</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #FDEFF4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4, #87CEEB);
+            padding: 2rem;
+            color: white;
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .card {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF6347;
+        }
+    </style>
+</head>
+<body>
+    <header>Juegos de Memoria</header>
+    <p>Encuentra las parejas de cartas idénticas.</p>
+    <p id="instrucciones">En este juego debes voltear dos cartas a la vez e intentar encontrar las parejas. Esto ayuda a mejorar la memoria y la concentración.</p>
+    
+    <button onclick="leerInstrucciones()">🔊 Escuchar Instrucciones</button>
+    <button onclick="detenerInstrucciones()">⏹️ Detener</button>
+    
+    <div class="game-container" id="game-board"></div>
+    
+    <button onclick="reiniciarJuego()">🔄 Reiniciar</button>
+    <button onclick="window.location.href='Prototipo.html'">🏠 Volver al Menú Principal</button>
+    
+    <script>
+        const emojis = ['🐶', '🐶', '🐱', '🐱', '🐰', '🐰', '🦊', '🦊', '🐸', '🐸', '🐵', '🐵', '🐯', '🐯', '🐮', '🐮'];
+        const colores = ['#FF69B4', '#FFD700', '#87CEEB', '#FF6347', '#6A5ACD', '#32CD32', '#FF8C00', '#8A2BE2'];
+        let cartasVolteadas = [];
+        let bloqueado = false;
+        let colorMap = {};
+        let speech;
+
+        function barajarCartas() {
+            return emojis.sort(() => Math.random() - 0.5);
+        }
+
+        function crearTablero() {
+            const tablero = document.getElementById("game-board");
+            tablero.innerHTML = "";
+            let cartasBarajadas = barajarCartas();
+            let colorIndex = 0;
+            
+            cartasBarajadas.forEach((emoji, index) => {
+                if (!colorMap[emoji]) {
+                    colorMap[emoji] = colores[colorIndex++ % colores.length];
+                }
+                
+                const carta = document.createElement("div");
+                carta.classList.add("card");
+                carta.dataset.emoji = emoji;
+                carta.dataset.color = colorMap[emoji];
+                carta.style.backgroundColor = '#CCC';
+                carta.onclick = () => voltearCarta(carta);
+                tablero.appendChild(carta);
+            });
+        }
+
+        function voltearCarta(carta) {
+            if (bloqueado || carta.classList.contains("flipped")) return;
+            
+            carta.textContent = carta.dataset.emoji;
+            carta.style.backgroundColor = carta.dataset.color;
+            carta.classList.add("flipped");
+            cartasVolteadas.push(carta);
+
+            if (cartasVolteadas.length === 2) {
+                verificarPareja();
+            }
+        }
+
+        function verificarPareja() {
+            bloqueado = true;
+            setTimeout(() => {
+                if (cartasVolteadas[0].dataset.emoji === cartasVolteadas[1].dataset.emoji) {
+                    cartasVolteadas = [];
+                } else {
+                    cartasVolteadas.forEach(carta => {
+                        carta.classList.remove("flipped");
+                        carta.textContent = "";
+                        carta.style.backgroundColor = "#CCC";
+                    });
+                    cartasVolteadas = [];
+                }
+                bloqueado = false;
+            }, 1000);
+        }
+
+        function reiniciarJuego() {
+            cartasVolteadas = [];
+            bloqueado = false;
+            colorMap = {};
+            crearTablero();
+        }
+
+        function leerInstrucciones() {
+            detenerInstrucciones();
+            let texto = document.getElementById("instrucciones").innerText;
+            speech = new SpeechSynthesisUtterance(texto);
+            speech.lang = 'es-ES';
+            window.speechSynthesis.speak(speech);
+        }
+        
+        function detenerInstrucciones() {
+            window.speechSynthesis.cancel();
+        }
+
+        crearTablero();
+    </script>
+</body>
+</html>
+

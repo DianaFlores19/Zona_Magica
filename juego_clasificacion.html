@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Clasificación</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: #FDEFF4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: linear-gradient(90deg, #FFD700, #FF69B4, #87CEEB);
+            padding: 2rem;
+            color: white;
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .category {
+            width: 200px;
+            height: 250px;
+            border: 2px dashed #FF4500;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background-color: white;
+            padding: 10px;
+        }
+
+        .object {
+            font-size: 3rem;
+            cursor: grab;
+            margin: 10px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #FF4500;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FF6347;
+        }
+    </style>
+</head>
+<body>
+    <header>Juego de Clasificación</header>
+    <p id="instrucciones">Arrastra cada objeto a su categoría correcta.</p>
+    
+    <button onclick="leerInstrucciones()">🔊 Escuchar Instrucciones</button>
+    <button onclick="detenerInstrucciones()">⏹️ Detener</button>
+    
+    <div class="game-container">
+        <div class="category" id="animales" ondrop="soltar(event, 'animales')" ondragover="permitirSoltar(event)">
+            🐶 Animales
+        </div>
+        <div class="category" id="frutas" ondrop="soltar(event, 'frutas')" ondragover="permitirSoltar(event)">
+            🍎 Frutas
+        </div>
+        <div class="category" id="objetos" ondrop="soltar(event, 'objetos')" ondragover="permitirSoltar(event)">
+            🏀 Objetos
+        </div>
+    </div>
+    
+    <div class="game-container" id="objects"></div>
+    
+    <button onclick="reiniciarJuego()">🔄 Reiniciar</button>
+    <button onclick="window.location.href='Prototipo.html'">🏠 Volver al Menú Principal</button>
+    
+    <script>
+        const categorias = {
+            animales: ['🐶', '🐱', '🐵'],
+            frutas: ['🍎', '🍌', '🍇'],
+            objetos: ['🏀', '🚗', '📚']
+        };
+        
+        let speech;
+        
+        function iniciarJuego() {
+            const contenedor = document.getElementById("objects");
+            contenedor.innerHTML = "";
+            
+            const objetos = Object.values(categorias).flat().sort(() => Math.random() - 0.5);
+            
+            objetos.forEach(obj => {
+                const div = document.createElement("div");
+                div.classList.add("object");
+                div.textContent = obj;
+                div.draggable = true;
+                div.ondragstart = (event) => arrastrar(event, obj);
+                contenedor.appendChild(div);
+            });
+        }
+        
+        function arrastrar(event, objeto) {
+            event.dataTransfer.setData("text", objeto);
+        }
+        
+        function permitirSoltar(event) {
+            event.preventDefault();
+        }
+        
+        function soltar(event, categoria) {
+            event.preventDefault();
+            let objeto = event.dataTransfer.getData("text");
+            
+            if (categorias[categoria].includes(objeto)) {
+                decirTexto("¡Correcto! " + objeto + " pertenece a la categoría " + categoria);
+            } else {
+                decirTexto("Inténtalo de nuevo. " + objeto + " no pertenece a " + categoria);
+            }
+        }
+        
+        function decirTexto(texto) {
+            detenerInstrucciones();
+            speech = new SpeechSynthesisUtterance(texto);
+            speech.lang = 'es-ES';
+            window.speechSynthesis.speak(speech);
+        }
+        
+        function leerInstrucciones() {
+            detenerInstrucciones();
+            let texto = document.getElementById("instrucciones").innerText;
+            decirTexto(texto);
+        }
+        
+        function detenerInstrucciones() {
+            window.speechSynthesis.cancel();
+        }
+        
+        function reiniciarJuego() {
+            iniciarJuego();
+        }
+        
+        iniciarJuego();
+    </script>
+</body>
+</html>
